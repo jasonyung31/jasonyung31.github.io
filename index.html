@@ -90,7 +90,7 @@
 
         <!-- Voice Input and File Upload -->
         <div class="d-flex justify-content-between">
-            <button id="voiceButton" class="btn btn-outline-secondary" type="button" onclick="startVoiceInput()">🎤 Speak</button>
+            <button id="voiceButton" class="btn btn-outline-secondary" type="button" >🎤 Speak</button>
             <input type="file" id="audioFile" class="form-control" accept=".mp3, .flac">
             <button class="btn btn-secondary" onclick="uploadAudio()">Upload Voice</button>
         </div>
@@ -365,7 +365,7 @@
         voiceButton.classList.remove('btn-outline-secondary');
         voiceButton.classList.add('btn-listening');
         voiceButton.innerText = '🎤 Recording...';
-        startRecording();
+        startVoiceInput();
     });
 
     voiceButton.addEventListener('mouseup', () => {
