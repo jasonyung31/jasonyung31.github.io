@@ -305,6 +305,8 @@
                 return;
             }    
             
+            requestMicrophonePermission();
+
             if (recognition){
                 recognition.stop();
             }
@@ -337,18 +339,17 @@
             };
             
             recognition.onend = function(){
-                if (isListening){
                 stopVoiceRecognition();
-                }
             };
-             // Start recognition
+
+            // Start recognition
             try {
                 recognition.start();
             } catch (e) {
                 alert("Couldn't start voice recognition: " + e.message);
                 stopVoiceRecognition();
             }
-            }
+        }
     
         function stopVoiceRecognition() {
             if (recognition) {
