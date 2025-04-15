@@ -100,6 +100,26 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
+        async function requestMicrophonePermission() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                stream.getTracks().forEach(track => track.stop());
+            return true;
+            } catch (error) {
+                console.error("Microphone permission denied:", error);
+                return false;
+            }
+        }
+
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+             (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        if (isIOS) {
+            // iOS-specific adjustments
+            recognition.continuous = false;
+            recognition.interimResults = false;  
+        // iOS needs a user gesture to start
+            document.body.addEventListener('touchstart', initVoiceRecognition, { once: true });
+        }
         const apiBaseUrl = 'https://fyp-3dxv.onrender.com';
         let currentLanguage = 'ur-PK'; // Default language is Urdu
 
