@@ -122,6 +122,7 @@
         const voiceButton = document.getElementById('voiceButton');
         let recognition;
         let pressTimer;
+        let isListening = false;
 
     // Initialize voice button based on device type
         if (isMobile) {
@@ -318,7 +319,9 @@
             };
             
             recognition.onend = () => {
+                if (isListening){
                 stopVoiceRecognition();
+                }
             };
              // Start recognition
             try {
