@@ -287,7 +287,7 @@
             }    
             
             requestMicrophonePermission();
-            
+
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             const recognition = new SpeechRecognition();
             const messageInput = document.getElementById('messageInput');
@@ -299,7 +299,6 @@
             recognition.lang = currentLanguage; 
             
             // Update button UI
-            const voiceButton = document.getElementById('voiceButton');
             voiceButton.innerHTML = '<i class="bi bi-mic-fill"></i>';
             voiceButton.classList.remove('btn-outline-secondary');
             voiceButton.classList.add('btn-listening');
