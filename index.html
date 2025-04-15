@@ -325,14 +325,6 @@
             recognition.continuous = false;
             recognition.interimResults = false;
             recognition.lang = currentLanguage; 
-            
-            // Update button UI
-            isListening = true;
-            voiceButton.innerHTML = '<i class="bi bi-mic-fill"></i>';
-            voiceButton.classList.remove('btn-outline-secondary');
-            voiceButton.classList.add('btn-listening');
-
-           
 
             mediaRecorder.ondataavailable = event => {
                 if (event.data.size > 0) audioChunks.push(event.data);
@@ -359,7 +351,36 @@
             };
 
             mediaRecorder.start();
+            isRecording = true;
+            updateButtonState();
+
+            setTimeout(() => {
+                if (isRecording) stopRecording();
+            }, 30000);
         }
+
+        function stopRecording() {
+        if (isRecording && mediaRecorder) {
+            mediaRecorder.stop();
+            isRecording = false;
+            updateButtonState();
+            
+            // Stop all tracks in the stream
+            mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        }
+    }
+
+    function updateButtonState() {
+        if (isRecording) {
+            voiceButton.classList.remove('btn-outline-secondary');
+            voiceButton.classList.add('btn-listening');
+            voiceButton.innerText = 'Recording...';
+        } else {
+            voiceButton.innerText = '🎤 Speak';
+            voiceButton.classList.remove('btn-listening');
+            voiceButton.classList.add('btn-outline-secondary');
+        }
+    }
           /*  recognition.onresult = (event) => {
                 document.getElementById('userMessage').value = document.getElementById('userMessage').value + event.results[0][0].transcript;
                 stopVoiceRecognition();
