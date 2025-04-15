@@ -288,10 +288,11 @@
             }    
             
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            const recognition = new SpeechRecognition();
+            //const recognition = new SpeechRecognition();
             const messageInput = document.getElementById('messageInput');
             const chatBox = document.getElementById('chatBox');
-        
+            recognition = new webkitSpeechRecognition();
+
             // Configure recognition
             recognition.continuous = false;
             recognition.interimResults = false;
@@ -323,6 +324,7 @@
             voiceButton.innerHTML = '<i class="bi bi-mic"></i>';
             voiceButton.classList.remove('btn-listening');
             voiceButton.classList.add('btn-outline-secondary');
+            voiceButton.textContent = "🎤 Speak";
         }
 
         // Initialize when page loads
