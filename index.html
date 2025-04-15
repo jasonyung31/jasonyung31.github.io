@@ -157,11 +157,11 @@
         const recordButton = document.getElementById('recordButton');
 
         // Send a message
-        async function sendMessage(apiType = 'v2') {
+        async function sendMessage() {
             const userMessage = document.getElementById('userMessage').value.trim();
             if (!userMessage) return;
         
-            addMessageToChat(`User (${apiType.toUpperCase()}): ${userMessage}`, 'user-message');
+            addMessageToChat(`${userMessage}`, 'user-message');
             document.getElementById('userMessage').value = '';
         
             const endpoint = '/query_with_translation_ver_jasony_gemini';
@@ -187,7 +187,7 @@
         
             } catch (error) {
                 console.error(error);
-                addMessageToChat(`Error from ${apiType} API.`, 'assistant-message');
+                addMessageToChat(`Error from API.`, 'assistant-message');
             }
         }
         
