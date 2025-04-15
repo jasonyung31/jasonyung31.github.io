@@ -310,12 +310,9 @@
                 return;
             }    
             
-            requestMicrophonePermission();
-
            // if (recognition){
           //      recognition.stop();
            // }
-
             //const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             //const recognition = new SpeechRecognition();
             const messageInput = document.getElementById('messageInput');
@@ -343,16 +340,8 @@
                     body: formData
                 });
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error('Error details:', errorData);
-                    throw new Error('Failed to process the audio.');
-                }
-
                 const data = await response.json();
-                const transcript = data.transcript || 'Sorry, I couldn’t process the audio.';
-                document.getElementById('userMessage').value = transcript;
-
+                document.getElementById('userMessage').value = data.transcript || 'Sorry, I couldn’t process the audio.';
                 } catch (err) {
                     console.error('Upload error:', err);
                     document.getElementById('userMessage').value = '❌ Error sending audio to server.';
@@ -364,6 +353,7 @@
 
     voiceButton.addEventListener('mousedown', () => {
         voiceButton.classList.remove('btn-outline-secondary');
+        voiceButton.classList.add('recording');
         voiceButton.classList.add('btn-listening');
         voiceButton.innerText = '🎤 Recording...';
         startVoiceInput();
@@ -374,6 +364,7 @@
         mediaRecorder.stop();
         voiceButton.innerText = '🎤 Hold to Speak';
         voiceButton.classList.remove('btn-listening');
+        voiceButton.classList.remove('recording');
         voiceButton.classList.add('btn-outline-secondary');
       }
     });
