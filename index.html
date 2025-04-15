@@ -291,25 +291,12 @@
             }
         }
 
-        function toggleVoiceRecognition() {
-            if (isListening) {
-                stopVoiceRecognition();
-            } else {
-                startVoiceRecognition();
-            }
-        }
 
         async function startVoiceInput() {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             mediaRecorder = new MediaRecorder(stream);
             audioChunks = [];
 
-            // Check browser support
-            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                addMessageToChat("Your browser doesn't support speech recognition", 'error');
-                return;
-            }    
-            
            // if (recognition){
           //      recognition.stop();
            // }
@@ -332,7 +319,7 @@
                 const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                 const formData = new FormData();
                 formData.append('audio', audioBlob, 'recording.webm');
-                formData.append('language', language);
+                formData.append('language', currentLanguage);
 
                 try {
                     const response = await fetch(`${apiBaseUrl}/speech_to_text`, {
