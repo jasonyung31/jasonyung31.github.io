@@ -123,7 +123,8 @@
         const voiceButton = document.getElementById('voiceButton');
         let recognition;
         let pressTimer;
-        let isListening = false;
+        let mediaRecorder;
+        let audioChunks = [];
 
     // Initialize voice button based on device type
       //  if (isMobile) {
@@ -354,12 +355,11 @@
 
                 } catch (err) {
                     console.error('Upload error:', err);
-                    transcriptBox.value = '❌ Error sending audio to server.';
+                    document.getElementById('userMessage').value = '❌ Error sending audio to server.';
                 }
             };
 
             mediaRecorder.start();
-
         }
 
     voiceButton.addEventListener('mousedown', () => {
