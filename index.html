@@ -248,6 +248,8 @@
             const recognition = new SpeechRecognition();
             const messageInput = document.getElementById('messageInput');
             const chatBox = document.getElementById('chatBox');
+            
+            event.preventDefault();
 
             // Configure recognition
             recognition.continuous = false;
@@ -261,7 +263,24 @@
             voiceButton.classList.add('btn-listening');
 
             recognition.start();
-
+            if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            // Mobile-specific adjustments
+                recognition.continuous = false;  // Disable continuous mode on mobile
+                recognition.interimResults = false;  // Disable partial results
+    
+            // Add touch event listeners
+                voiceButton.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    startVoiceRecognition();
+                });
+    
+            // Longer timeout for mobile devices
+                recognition.onspeechend = function() {
+                    setTimeout(() => {
+                        if (recognition) recognition.stop();
+                    }, 2000);
+                };
+            }    
             recognition.onresult = (event) => {
                 const transcript = event.results[0][0].transcript;
                 document.getElementById('userMessage').value = transcript;
