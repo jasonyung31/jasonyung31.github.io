@@ -299,6 +299,7 @@
         }
 
         async function startVoiceInput() {
+            try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             mediaRecorder = new MediaRecorder(stream);
             audioChunks = [];
@@ -358,6 +359,11 @@
                 if (isRecording) stopRecording();
             }, 30000);
         }
+        catch (error) {
+            console.error("Recording failed:", error);
+            alert("Microphone access denied. Please enable permissions.");
+        }
+    }
 
         function stopRecording() {
         if (isRecording && mediaRecorder) {
@@ -369,6 +375,7 @@
             mediaRecorder.stream.getTracks().forEach(track => track.stop());
         }
     }
+
 
     function updateButtonState() {
         if (isRecording) {
