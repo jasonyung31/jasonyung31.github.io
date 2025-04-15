@@ -287,6 +287,10 @@
                 return;
             }    
             
+            if (recognition){
+                recognition.stop();
+            }
+
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             //const recognition = new SpeechRecognition();
             const messageInput = document.getElementById('messageInput');
@@ -307,6 +311,7 @@
               
             recognition.onresult = (event) => {
                 document.getElementById('userMessage').value = event.results[0][0].transcript;
+                resetVoiceButton();
             };
             
             recognition.onerror = (event) => {
@@ -317,15 +322,36 @@
             recognition.onend = () => {
                 resetVoiceButton();
             };
-        }
-        
-        function resetVoiceButton() {
+             // Start recognition
+            try {
+                recognition.start();
+            } catch (e) {
+                alert("Couldn't start voice recognition: " + e.message);
+                stopVoiceRecognition();
+            }
+            }
+    
+        function stopVoiceRecognition() {
+            if (recognition) {
+                try {
+                    recognition.stop();
+                } catch (e) {
+                    console.log("Recognition already stopped");
+                }
+            }
+            isListening = false;
+            voiceButton.innerHTML = '<i class="bi bi-mic"></i>';
+            voiceButton.classList.remove('btn-danger');
+            voiceButton.classList.add('btn-outline-secondary');
+            voiceButton.title = "Click to start voice input";
+        }   
+       /* function resetVoiceButton() {
             voiceButton.innerHTML = '<i class="bi bi-mic"></i>';
             voiceButton.classList.remove('btn-listening');
             voiceButton.classList.add('btn-outline-secondary');
             voiceButton.textContent = "🎤 Speak";
             voiceButton.classList.add('btn-info');
-        }
+        }*/
 
         // Initialize when page loads
         window.addEventListener('DOMContentLoaded', initVoiceRecognition);
