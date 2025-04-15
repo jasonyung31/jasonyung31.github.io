@@ -343,8 +343,16 @@
                     body: formData
                 });
 
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('Error details:', errorData);
+                    throw new Error('Failed to process the audio.');
+                }
+
                 const data = await response.json();
-                document.getElementById('userMessage').value = data.transcript || '❌ No speech recognized.';
+                const transcript = data.transcript || 'Sorry, I couldn’t process the audio.';
+                document.getElementById('userMessage').value = transcript;
+
                 } catch (err) {
                     console.error('Upload error:', err);
                     transcriptBox.value = '❌ Error sending audio to server.';
@@ -352,7 +360,6 @@
             };
 
             mediaRecorder.start();
-
 
         }
         catch (error) {
@@ -371,7 +378,7 @@
     voiceButton.addEventListener('mouseup', () => {
       if (mediaRecorder && mediaRecorder.state !== 'inactive') {
         mediaRecorder.stop();
-        voiceButton.innerText = '🎤 Speak';
+        voiceButton.innerText = '🎤 Hold to Speak';
         voiceButton.classList.remove('btn-listening');
         voiceButton.classList.add('btn-outline-secondary');
       }
