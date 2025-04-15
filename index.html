@@ -299,7 +299,6 @@
         }
 
         async function startVoiceInput() {
-            try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             mediaRecorder = new MediaRecorder(stream);
             audioChunks = [];
@@ -362,11 +361,6 @@
             mediaRecorder.start();
 
         }
-        catch (error) {
-            console.error("Recording failed:", error);
-            alert("Microphone access denied. Please enable permissions.");
-        }
-    }
 
     voiceButton.addEventListener('mousedown', () => {
         voiceButton.classList.remove('btn-outline-secondary');
