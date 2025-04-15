@@ -298,7 +298,11 @@
             }
         }
 
-        function startVoiceInput() {
+        async function startVoiceInput() {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+            
             // Check browser support
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
                 addMessageToChat("Your browser doesn't support speech recognition", 'error');
@@ -327,6 +331,34 @@
             voiceButton.innerHTML = '<i class="bi bi-mic-fill"></i>';
             voiceButton.classList.remove('btn-outline-secondary');
             voiceButton.classList.add('btn-listening');
+
+           
+
+            mediaRecorder.ondataavailable = event => {
+                if (event.data.size > 0) audioChunks.push(event.data);
+             };
+
+            mediaRecorder.onstop = async () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            const formData = new FormData();
+            formData.append('audio', audioBlob, 'recording.webm');
+            formData.append('language', language);
+
+            try {
+            const response = await fetch(`${apiBaseUrl}/speech_to_text`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            transcriptBox.value = data.transcript || '❌ No speech recognized.';
+            } catch (err) {
+                console.error('Upload error:', err);
+                transcriptBox.value = '❌ Error sending audio to server.';
+            }
+            };
+
+            mediaRecorder.start();
 
             recognition.onresult = (event) => {
                 document.getElementById('userMessage').value = document.getElementById('userMessage').value + event.results[0][0].transcript;
