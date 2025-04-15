@@ -45,6 +45,12 @@
 
         .assistant-message .bubble {
             background-color: #f1f1f1;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            max-width: 70%;
+            display: inline-block;
+            text-align: left;
         }
 
         .assistant-message button {
@@ -258,6 +264,12 @@
             addOptionMessageToChat(messages[language].chooseOption, messages[language].options, 'assistant-message');
         }
 
+        // Event listener for language selector
+        document.getElementById("languageSelector").addEventListener("change", (event) => {
+            currentLanguage = event.target.value; // Update the current language
+            updateMessages(currentLanguage); // Update the messages
+        });
+        
         window.onload = function () {
             updateMessages(currentLanguage);
         };
