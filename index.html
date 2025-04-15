@@ -90,7 +90,7 @@
 
         <!-- Voice Input and File Upload -->
         <div class="d-flex justify-content-between">
-            <button id="voiceButton" class="btn btn-outline-secondary" type="button" >🎤 Speak</button>
+            <button id="voiceButton" class="btn btn-outline-secondary" type="button" >🎤 Hold to Speak</button>
             <input type="file" id="audioFile" class="form-control" accept=".mp3, .flac">
             <button class="btn btn-secondary" onclick="uploadAudio()">Upload Voice</button>
         </div>
@@ -100,7 +100,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        const apiBaseUrl = 'https://hkmufyp.onrender.com';
+        const apiBaseUrl = 'https://fyp-3dxv.onrender.com';
         let currentLanguage = 'ur-PK'; // Default language is Urdu
 
         const messages = {
@@ -127,31 +127,18 @@
         let audioChunks = [];
 
     // Initialize voice button based on device type
-      //  if (isMobile) {
+        if (isMobile) {
         // Mobile - press and hold implementation
-        /*    voiceButton.addEventListener('touchstart', function(e) {
+            voiceButton.addEventListener('touchstart', function(e) {
                 e.preventDefault();
-                pressTimer = setTimeout(startVoiceInput); 
+                startVoiceInput(); 
             });
 
             voiceButton.addEventListener('touchend', function(e) {
                 e.preventDefault();
-                clearTimeout(pressTimer);
-                if (recognition) recognition.stop();
+                if (mediaRecorder) mediaRecorder.stop();
             });
-
-            // Prevent button highlight on touch
-            voiceButton.addEventListener('touchmove', function(e) {
-                e.preventDefault();
-                clearTimeout(pressTimer);
-            });
-            
-        } else {
-        // Desktop - single click implementation
-            voiceButton.addEventListener('click', function() {
-                startVoiceInput();
-            });
-        }
+        } 
 
         /*if (isIOS) {
             // iOS-specific initialization
@@ -297,20 +284,6 @@
             mediaRecorder = new MediaRecorder(stream);
             audioChunks = [];
 
-           // if (recognition){
-          //      recognition.stop();
-           // }
-            //const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            //const recognition = new SpeechRecognition();
-            const messageInput = document.getElementById('messageInput');
-            const chatBox = document.getElementById('chatBox');
-           // recognition = new webkitSpeechRecognition();
-
-            // Configure recognition
-            //recognition.continuous = false;
-           // recognition.interimResults = false;
-           // recognition.lang = currentLanguage; 
-
             mediaRecorder.ondataavailable = event => {
                 if (event.data.size > 0) audioChunks.push(event.data);
              };
@@ -355,51 +328,7 @@
         voiceButton.classList.add('btn-outline-secondary');
       }
     });
-          /*  recognition.onresult = (event) => {
-                document.getElementById('userMessage').value = document.getElementById('userMessage').value + event.results[0][0].transcript;
-                stopVoiceRecognition();
-            };
-            
-            recognition.onerror = (event) => {
-                addMessageToChat("Voice input error: " + event.error, 'error');
-                stopVoiceRecognition();
-            };*/
-            
-           // recognition.onend = function(){
-           //     stopVoiceRecognition();
-            //};
-
-            // Start recognition
-        /*    try {
-                recognition.start();
-            } catch (e) {
-                alert("Couldn't start voice recognition: " + e.message);
-                stopVoiceRecognition();
-            }
-        }*/
-    
-       /* function stopVoiceRecognition() {
-            if (recognition) {
-                try {
-                    recognition.stop();
-                } catch (e) {
-                    console.log("Recognition already stopped");
-                }
-            }
-            isListening = false;
-            voiceButton.classList.remove('btn-listening');
-            voiceButton.classList.add('btn-outline-secondary');
-            voiceButton.classList.add('btn-info');
-            voiceButton.textContent = "🎤 Speak";
-        } */  
-       /* function resetVoiceButton() {
-            voiceButton.innerHTML = '<i class="bi bi-mic"></i>';
-            voiceButton.classList.remove('btn-listening');
-            voiceButton.classList.add('btn-outline-secondary');
-            voiceButton.textContent = "🎤 Speak";
-            voiceButton.classList.add('btn-info');
-        }*/
-
+          
         // Initialize when page loads
         window.addEventListener('DOMContentLoaded', initVoiceRecognition);
         function resetVoiceButton_on_load() {
