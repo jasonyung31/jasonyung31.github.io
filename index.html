@@ -60,7 +60,7 @@
         .assistant-message button:hover {
             background-color: #0056b3;
         }
-        
+
         #languageSelector {
             position: absolute;
             top: 10px;
@@ -330,59 +330,67 @@
        
         
 
-        recordButton.addEventListener('mousedown', async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-                audioChunks = [];
-    
-                mediaRecorder.ondataavailable = event => {
-                    if (event.data.size > 0) {
-                        audioChunks.push(event.data);
-                    }
-                };
-    
-                mediaRecorder.onstop = async () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                    const formData = new FormData();
-                    formData.append('audio', audioBlob, 'recording.webm');
-                    formData.append('language', currentLanguage);
-    
-                    try {
-                        const response = await fetch(`${apiBaseUrl}/speech_to_text`, {
-                            method: 'POST',
-                            body: formData
-                        });
-    
-                        const data = await response.json();
-                        const transcript = data.transcript || '❌ No speech recognized.';
-                        document.getElementById('userMessage').value = transcript;
-                    } catch (err) {
-                        console.error('Upload error:', err);
-                        alert('❌ Failed to process the audio.');
-                    }
-                };
-    
-                mediaRecorder.start();
-                recordButton.classList.add('recording');
-                recordButton.innerText = '🎤 Recording...';
-            } catch (err) {
-                alert("🎙️ Unable to access microphone.");
-                console.error(err);
-            }
+        async function startVoiceInput() {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+
+            mediaRecorder.ondataavailable = event => {
+                if (event.data.size > 0) audioChunks.push(event.data);
+             };
+
+            mediaRecorder.onstop = async () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                const formData = new FormData();
+                formData.append('audio', audioBlob, 'recording.webm');
+                formData.append('language', currentLanguage);
+
+                try {
+                    const response = await fetch(`${apiBaseUrl}/speech_to_text`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                document.getElementById('userMessage').value = data.transcript || 'Sorry, I couldn’t process the audio.';
+                } catch (err) {
+                    console.error('Upload error:', err);
+                    document.getElementById('userMessage').value = '❌ Error sending audio to server.';
+                }
+            };
+
+            mediaRecorder.start();
+        }
+
+        recordButton.addEventListener('mousedown', () => {
+            recordButton.classList.remove('btn-outline-secondary');
+            recordButton.classList.add('recording');
+            recordButton.classList.add('btn-listening');
+            recordButton.innerText = '🎤 Recording...';
+            startVoiceInput();
         });
-    
+
         recordButton.addEventListener('mouseup', () => {
             if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                mediaRecorder.stop();
-                recordButton.classList.remove('recording');
-                recordButton.innerText = '🎤 Hold to Speak';
-            }
-        });
+            mediaRecorder.stop();
+            recordButton.innerText = '🎤 Hold to Speak';
+            recordButton.classList.remove('btn-listening');
+            recordButton.classList.remove('recording');
+            recordButton.classList.add('btn-outline-secondary');
+        }
+    });
 
         // Initialize voice input on page load
         window.onload = initializeVoiceInput;
-
+        // Initialize when page loads
+        window.addEventListener('DOMContentLoaded', initVoiceRecognition);
+        function resetVoiceButton_on_load() {
+            const recordButton = document.getElementById('recordButton');
+            recordButton.textContent = "🎤 Speak";
+            recordButton.classList.remove('btn-listening');
+            recordButton.classList.remove('recording');
+            recordButton.classList.add('btn-outline-secondary')
+        }
         // Upload audio file for speech-to-text
         async function uploadAudio() {
             const fileInput = document.getElementById('audioFile');
