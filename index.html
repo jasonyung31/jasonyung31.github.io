@@ -61,6 +61,10 @@
             top: 10px;
             right: 10px;
         }
+        .btn-listening {
+            background-color: #17f561 !important;
+            color: white !important;
+        }
     </style>
 </head>
 <body>
@@ -86,7 +90,7 @@
 
         <!-- Voice Input and File Upload -->
         <div class="d-flex justify-content-between">
-            <button class="btn btn-info" onclick="startVoiceInput()">🎤 Speak</button>
+            <button id="voiceButton" class="btn btn-outline-secondary" type="button" onclick="startVoiceInput()">🎤 Speak</button>
             <input type="file" id="audioFile" class="form-control" accept=".mp3, .flac">
             <button class="btn btn-secondary" onclick="uploadAudio()">Upload Voice</button>
         </div>
@@ -96,20 +100,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        const apiBaseUrl = 'https://hkmufyp.onrender.com/';
+        const apiBaseUrl = 'https://fyp-3dxv.onrender.com';
         let currentLanguage = 'ur-PK'; // Default language is Urdu
 
         const messages = {
             'ur-PK': {
                 welcome: "(歡迎來到法律助理)قانونی معاون میں خوش آمدید",
                 chooseOption: "(請選擇您想了解的法律類型)براہ کرم قانون کی وہ قسم منتخب کریں جس کے بارے میں آپ جاننا چاہتے ہیں۔",
-                options: ["(交通法規)ٹریفک کے ضوابط", "(勞動法)لیبر لا" , "(歧視)امتیازی سلوک"     ,  "(財產)جائیداد"    ,   "(簽證/居留權)ویزا/رہائش کا حق" ,"سائبر کرائم(網絡犯罪)","(其他/不確定)دوسرے/یقین نہیں۔"],
+                options: ["(交通法規)ٹریفک کے ضوابط", "(勞動法)لیبر لا" , "(歧視)امتیازی سلوک"     ,  "(財產)جائیداد"    ,   "(簽證/居留權)ویزا/رہائش کا حق" ,"(其他/不確定)دوسرے/یقین نہیں۔"],
                 selected: "(這是你的選擇)آپ نے جو انتخاب کیا وہ ہے۔",
             },
             'ne-NP': {
                 welcome: "कानुनी सहायकमा स्वागत छ(歡迎來到法律助理)",
                 chooseOption: "कृपया तपाईले जान्न चाहनु भएको कानूनको प्रकार चयन गर्नुहोस्(請選擇您想了解的法律類型)",
-                options: ["ट्राफिक नियमहरू(交通法規)", "श्रम कानून(勞動法)", "भेदभाव(歧視)", "सम्पत्ति(財產)", "भिसा / बसोबासको अधिकार(簽證/居留權)","साइबर अपराध(網絡犯罪)", "अन्य/अनिश्चित(其他/不確定)"],
+                options: ["ट्राफिक नियमहरू(交通法規)", "श्रम कानून(勞動法)", "भेदभाव(歧視)", "सम्पत्ति(財產)", "भिसा / बसोबासको अधिकार(簽證/居留權)", "अन्य/अनिश्चित(其他/不確定)"],
                 selected: "तपाईले रोजेको कुरा हो(這是你的選擇)",
             },
         };
@@ -130,6 +134,7 @@
             // Clear input field
             document.getElementById('userMessage').value = '';
 
+            
             try {
                 const response = await fetch(`${apiBaseUrl}/query_with_translation_ver_jasony_gemini`, {
                     method: 'POST',
@@ -231,6 +236,55 @@
         window.onload = function () {
             updateMessages(currentLanguage);
         };
+
+        function startVoiceInput() {
+            // Check browser support
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                addMessageToChat("Your browser doesn't support speech recognition", 'error');
+                return;
+            }
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            const messageInput = document.getElementById('messageInput');
+            const chatBox = document.getElementById('chatBox');
+
+            // Configure recognition
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = currentLanguage; 
+            
+            // Update button UI
+            const voiceButton = document.getElementById('voiceButton');
+            voiceButton.innerHTML = '<i class="bi bi-mic-fill"></i>';
+            voiceButton.classList.remove('btn-outline-secondary');
+            voiceButton.classList.add('btn-listening');
+
+            recognition.start();
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('userMessage').value = transcript;
+            };
+            
+            recognition.onerror = (event) => {
+                addMessageToChat("Voice input error: " + event.error, 'error');
+                voiceButton.classList.remove('listening');
+            };
+            
+            recognition.onend = () => {
+                voiceButton.classList.remove('listening');
+            };
+        }
+         
+        // Initialize when page loads
+        window.addEventListener('DOMContentLoaded', initVoiceRecognition);
+        function resetVoiceButton() {
+            const voiceButton = document.getElementById('voiceButton');
+            voiceButton.textContent = "🎤 Speak";
+            voiceButton.classList.remove('btn-listening');
+            voiceButton.classList.add('btn-info');
+        }
 
         // Upload audio file for speech-to-text
         async function uploadAudio() {
