@@ -338,10 +338,10 @@
                 }
             }
             isListening = false;
-            voiceButton.innerHTML = '<i class="bi bi-mic"></i>';
-            voiceButton.classList.remove('btn-danger');
+            voiceButton.classList.remove('btn-listening');
             voiceButton.classList.add('btn-outline-secondary');
-            voiceButton.title = "Click to start voice input";
+            voiceButton.classList.add('btn-info');
+            voiceButton.textContent = "🎤 Speak";
         }   
        /* function resetVoiceButton() {
             voiceButton.innerHTML = '<i class="bi bi-mic"></i>';
