@@ -119,7 +119,7 @@
         };
 
         const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        //const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
         const voiceButton = document.getElementById('voiceButton');
         let recognition;
         let pressTimer;
@@ -152,18 +152,14 @@
             });
         }
 
-        if (isIOS) {
+        /*if (isIOS) {
             // iOS-specific initialization
             document.body.addEventListener('touchstart', initVoiceRecognition, { once: true });
         } else {
             // Regular initialization for other devices
             voiceButton.addEventListener('click', toggleVoiceRecognition);
-        }
+        }*/
     
-        function initVoiceRecognition() {
-            // Now we can add the regular click handler for iOS
-            voiceButton.addEventListener('click', toggleVoiceRecognition);
-        }
         // Change language dynamically
         document.getElementById('languageDropdown').addEventListener('change', (event) => {
             currentLanguage = event.target.value;
