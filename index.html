@@ -289,9 +289,7 @@
             const recognition = new SpeechRecognition();
             const messageInput = document.getElementById('messageInput');
             const chatBox = document.getElementById('chatBox');
-            
-            event.preventDefault();
-
+        
             // Configure recognition
             recognition.continuous = false;
             recognition.interimResults = false;
@@ -305,10 +303,6 @@
 
             recognition.start();
             if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-            // Mobile-specific adjustments
-                recognition.continuous = false;  // Disable continuous mode on mobile
-                recognition.interimResults = false;  // Disable partial results
-    
             // Add touch event listeners
                 voiceButton.addEventListener('touchstart', function(e) {
                     e.preventDefault();
