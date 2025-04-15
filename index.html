@@ -291,8 +291,6 @@
                     }, 2000);
                 };
 
-                // Request microphone permission
-                requestMicrophonePermission();
                 // Detect iOS
                 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
                 if (isIOS) {
@@ -303,6 +301,8 @@
                 // iOS needs a user gesture to start
                 document.body.addEventListener('touchstart', initVoiceRecognition, { once: true });
                 }
+
+                requestMicrophonePermission();
             }    
             recognition.onresult = (event) => {
                 const transcript = event.results[0][0].transcript;
