@@ -142,6 +142,15 @@
                 e.preventDefault();
                 clearTimeout(pressTimer);
             });
+
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            if (isIOS) {
+                // iOS-specific adjustments
+                recognition.continuous = false;
+                recognition.interimResults = false; 
+                // iOS needs a user gesture to start
+                document.body.addEventListener('touchstart', initVoiceRecognition, { once: true });
+            }
         } else {
         // Desktop - single click implementation
             voiceButton.addEventListener('click', function() {
