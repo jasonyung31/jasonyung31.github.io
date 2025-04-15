@@ -118,6 +118,37 @@
             },
         };
 
+        const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const voiceButton = document.getElementById('voiceButton');
+        let recognition;
+        let pressTimer;
+
+    // Initialize voice button based on device type
+        if (isMobile) {
+        // Mobile - press and hold implementation
+            voiceButton.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                pressTimer = setTimeout(startVoiceRecognition, 500); // 500ms hold
+            });
+
+            voiceButton.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                clearTimeout(pressTimer);
+                if (recognition) recognition.stop();
+            });
+
+            // Prevent button highlight on touch
+            voiceButton.addEventListener('touchmove', function(e) {
+                e.preventDefault();
+                clearTimeout(pressTimer);
+            });
+        } else {
+        // Desktop - single click implementation
+            voiceButton.addEventListener('click', function() {
+                startVoiceRecognition();
+            });
+        }
+
         // Change language dynamically
         document.getElementById('languageDropdown').addEventListener('change', (event) => {
             currentLanguage = event.target.value;
