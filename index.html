@@ -312,20 +312,20 @@
             
             requestMicrophonePermission();
 
-            if (recognition){
-                recognition.stop();
-            }
+           // if (recognition){
+          //      recognition.stop();
+           // }
 
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            //const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             //const recognition = new SpeechRecognition();
             const messageInput = document.getElementById('messageInput');
             const chatBox = document.getElementById('chatBox');
-            recognition = new webkitSpeechRecognition();
+           // recognition = new webkitSpeechRecognition();
 
             // Configure recognition
-            recognition.continuous = false;
-            recognition.interimResults = false;
-            recognition.lang = currentLanguage; 
+            //recognition.continuous = false;
+           // recognition.interimResults = false;
+           // recognition.lang = currentLanguage; 
 
             mediaRecorder.ondataavailable = event => {
                 if (event.data.size > 0) audioChunks.push(event.data);
@@ -352,12 +352,8 @@
             };
 
             mediaRecorder.start();
-            isRecording = true;
-            updateButtonState();
 
-            setTimeout(() => {
-                if (isRecording) stopRecording();
-            }, 30000);
+
         }
         catch (error) {
             console.error("Recording failed:", error);
@@ -365,29 +361,21 @@
         }
     }
 
-        function stopRecording() {
-        if (isRecording && mediaRecorder) {
-            mediaRecorder.stop();
-            isRecording = false;
-            updateButtonState();
-            
-            // Stop all tracks in the stream
-            mediaRecorder.stream.getTracks().forEach(track => track.stop());
-        }
-    }
+    voiceButton.addEventListener('mousedown', () => {
+        voiceButton.classList.remove('btn-outline-secondary');
+        voiceButton.classList.add('btn-listening');
+        voiceButton.innerText = '🎤 Recording...';
+        startRecording();
+    });
 
-
-    function updateButtonState() {
-        if (isRecording) {
-            voiceButton.classList.remove('btn-outline-secondary');
-            voiceButton.classList.add('btn-listening');
-            voiceButton.innerText = 'Recording...';
-        } else {
-            voiceButton.innerText = '🎤 Speak';
-            voiceButton.classList.remove('btn-listening');
-            voiceButton.classList.add('btn-outline-secondary');
-        }
-    }
+    voiceButton.addEventListener('mouseup', () => {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+        voiceButton.innerText = '🎤 Speak';
+        voiceButton.classList.remove('btn-listening');
+        voiceButton.classList.add('btn-outline-secondary');
+      }
+    });
           /*  recognition.onresult = (event) => {
                 document.getElementById('userMessage').value = document.getElementById('userMessage').value + event.results[0][0].transcript;
                 stopVoiceRecognition();
