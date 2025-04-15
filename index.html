@@ -150,30 +150,6 @@
             });
         }
 
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-                 (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    
-        // iOS-specific initialization
-        if (isIOS) {
-            // Change button title for iOS
-            voiceButton.title = "Tap to speak (iOS)";     
-            // Add a one-time touchstart listener to initialize
-            document.body.addEventListener('touchstart', initIOSVoiceRecognition, { once: true });
-        } else {
-            // Regular initialization for other devices
-            voiceButton.addEventListener('click', startVoiceRecognition);
-        }
-    
-        function initIOSVoiceRecognition() {
-            // Now we can add the regular click handler for iOS
-            voiceButton.addEventListener('click', handleIOSVoiceInput);
-        }
-    
-        function handleIOSVoiceInput() {
-            // On iOS, we need to create a new recognition instance each time
-            startVoiceRecognition();
-        }
-
         // Change language dynamically
         document.getElementById('languageDropdown').addEventListener('change', (event) => {
             currentLanguage = event.target.value;
