@@ -342,7 +342,7 @@
                 stopVoiceRecognition();
             };
             
-            recognition.onend = () => {
+            recognition.onend = function(){
                 if (isListening){
                 stopVoiceRecognition();
                 }
