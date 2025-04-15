@@ -286,8 +286,6 @@
                 return;
             }    
             
-            requestMicrophonePermission();
-
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             const recognition = new SpeechRecognition();
             const messageInput = document.getElementById('messageInput');
