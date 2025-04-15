@@ -149,19 +149,6 @@
             currentLanguage = event.target.value;
         });
         
-        if (isMobile) {
-        // Mobile - press and hold implementation
-            voiceButton.addEventListener('touchstart', function(e) {
-                e.preventDefault();
-                startVoiceInput(); 
-            });
-
-            voiceButton.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                if (mediaRecorder) mediaRecorder.stop();
-            });
-        } 
-
         // Send a message
         async function sendMessage() {
             const userMessage = document.getElementById('userMessage').value.trim();
@@ -284,7 +271,7 @@
                 return false;
             }
         }
-        
+
         // Add Assistant Message with Play, Show Details, and Show Chinese Result
         function addAssistantMessage(message, laws, language, chineseResponse = '') {
             const chatBox = document.getElementById('chatBox');
