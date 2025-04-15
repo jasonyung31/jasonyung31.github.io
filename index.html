@@ -284,7 +284,10 @@
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
                 addMessageToChat("Your browser doesn't support speech recognition", 'error');
                 return;
-            }          
+            }    
+            
+            requestMicrophonePermission();
+            
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             const recognition = new SpeechRecognition();
             const messageInput = document.getElementById('messageInput');
