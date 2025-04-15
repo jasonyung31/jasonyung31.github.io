@@ -128,7 +128,7 @@
         // Mobile - press and hold implementation
             voiceButton.addEventListener('touchstart', function(e) {
                 e.preventDefault();
-                pressTimer = setTimeout(startVoiceInput, 500); // 500ms hold
+                pressTimer = setTimeout(startVoiceInput); 
             });
 
             voiceButton.addEventListener('touchend', function(e) {
