@@ -128,10 +128,11 @@
         const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
         let mediaRecorder;
         let audioChunks = [];
-
+        const messageInput = document.getElementById('messageInput');
+        const chatBox = document.getElementById('chatBox');
         document.getElementById('languageDropdown').addEventListener('change', (event) => {
-        currentLanguage = event.target.value;
-    });
+            currentLanguage = event.target.value;
+        });
 
         const messages = {
             'ur-PK': {
