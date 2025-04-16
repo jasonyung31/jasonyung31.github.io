@@ -167,12 +167,6 @@
         async function sendMessage() {
             const userMessage = document.getElementById('userMessage').value.trim();
             if (!userMessage) return;
-            
-            if option == null && current language == 'ur-PK' {
-                option = "دوسرے";}
-           
-            if option == null && current language == 'ur-NP' {
-                option = "अन्य";}
         
             addMessageToChat(`${userMessage}`, 'user-message');
             document.getElementById('userMessage').value = '';
