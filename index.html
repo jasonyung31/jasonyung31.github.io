@@ -291,7 +291,7 @@
             messageElement.innerHTML = `
                 <span class="bubble">${message}</span><br>
                 <button class="btn btn-sm btn-secondary mt-2" onclick="textToSpeech('${message}', '${language}', this)">🔊 Play</button>
-                ${laws.length > 0 ? <button class="btn btn-sm btn-info mt-2" onclick="toggleLawDetails(this)">📄 Show Details</button> : ''}
+                ${laws.length > 0 ? `<button class="btn btn-sm btn-info mt-2" onclick="toggleLawDetails(this)">📄 Show Details</button>` : ''}
                 <button class="btn btn-sm btn-warning mt-2" onclick="toggleChineseResult(this)">🌐 Show Chinese Result</button>
                 <div class="chinese-result" style="display:none; margin-top:5px; background-color:#f8f9fa; padding:10px; border-radius:8px;">
                     <strong>Chinese Response:</strong><br>${chineseResponse}
