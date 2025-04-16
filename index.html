@@ -128,7 +128,10 @@
         const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
         let mediaRecorder;
         let audioChunks = [];
-        const recordButton = document.getElementById('recordButton');
+
+        document.getElementById('languageDropdown').addEventListener('change', (event) => {
+        currentLanguage = event.target.value;
+    });
 
         const messages = {
             'ur-PK': {
@@ -144,11 +147,21 @@
                 selected: "तपाईले रोजेको कुरा हो(這是你的選擇)",
             },
         };
-
-        document.getElementById('languageDropdown').addEventListener('change', (event) => {
-            currentLanguage = event.target.value;
-        });
         
+        if (isMobile) {
+        // Mobile - press and hold implementation
+            voiceButton.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                startVoiceInput(); 
+            });
+
+            voiceButton.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                if (mediaRecorder) mediaRecorder.stop();
+            });
+        } 
+        const recordButton = document.getElementById('recordButton');
+
         // Send a message
         async function sendMessage() {
             const userMessage = document.getElementById('userMessage').value.trim();
@@ -256,21 +269,10 @@
             currentLanguage = event.target.value; // Update the current language
             updateMessages(currentLanguage); // Update the messages
         });
-
+        
         window.onload = function () {
             updateMessages(currentLanguage);
         };
-
-        async function requestMicrophonePermission() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                stream.getTracks().forEach(track => track.stop());
-                return true;
-            } catch (error) {
-                console.error("Microphone permission denied:", error);
-                return false;
-            }
-        }
 
         // Add Assistant Message with Play, Show Details, and Show Chinese Result
         function addAssistantMessage(message, laws, language, chineseResponse = '') {
@@ -486,3 +488,4 @@
 </body>
 
 </html>
+
