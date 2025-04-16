@@ -128,7 +128,6 @@
         const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
         let mediaRecorder;
         let audioChunks = [];
-        let options = "دوسرے";
         const messageInput = document.getElementById('messageInput');
         const chatBox = document.getElementById('chatBox');
         document.getElementById('languageDropdown').addEventListener('change', (event) => {
@@ -180,7 +179,6 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         prompt: userMessage,
-                        options: options,
                         original_language: currentLanguage
                     })
                 });
@@ -258,7 +256,6 @@
         // Function to update messages based on the selected language
         function updateMessages(language) {
             const chatBox = document.getElementById("chatBox");
-            options = "अन्य";
             chatBox.innerHTML = ""; // Clear the chatbox
 
             // Add the welcome message
