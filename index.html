@@ -190,7 +190,7 @@
                 const retrievedLaws = data.retrieved_laws || [];
                 const chineseResponse = data.response_in_chinese || 'No Chinese response available.';
         
-                addAssistantMessage(`(${apiType.toUpperCase()}) ${assistantMessage}`, retrievedLaws, currentLanguage, chineseResponse);
+                addAssistantMessage(`${assistantMessage}`, retrievedLaws, currentLanguage, chineseResponse);
         
             } catch (error) {
                 console.error(error);
