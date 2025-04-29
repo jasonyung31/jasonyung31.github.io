@@ -430,6 +430,7 @@
 
         // Text-to-Speech function
         async function textToSpeech(text, language, button) {
+            global currentAudio;
             try {
                 // If an audio is already playing, stop it
                 if (currentAudio && !currentAudio.paused) {
