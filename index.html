@@ -122,7 +122,7 @@
         const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
         let mediaRecorder;
         let audioChunks = [];
-        let currentAudio ;
+        let currentAudio;
         const messageInput = document.getElementById('messageInput');
         const chatBox = document.getElementById('chatBox');
         document.getElementById('languageDropdown').addEventListener('change', (event) => {
@@ -430,8 +430,8 @@
 
         // Text-to-Speech function
         async function textToSpeech(text, language, button) {
-            global currentAudio;
             try {
+                global currentAudio;
                 // If an audio is already playing, stop it
                 if (currentAudio && !currentAudio.paused) {
                     currentAudio.pause();
